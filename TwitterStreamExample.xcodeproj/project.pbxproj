@@ -14,13 +14,15 @@
 		03BBA3BC199A513100D0389E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BBA3BB199A513100D0389E /* main.m */; };
 		03BBA3C0199A513100D0389E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BBA3BF199A513100D0389E /* AppDelegate.m */; };
 		03BBA3C3199A513200D0389E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03BBA3C1199A513200D0389E /* Main.storyboard */; };
-		03BBA3C6199A513200D0389E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BBA3C5199A513200D0389E /* ViewController.m */; };
+		03BBA3C6199A513200D0389E /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BBA3C5199A513200D0389E /* MainViewController.m */; };
 		03BBA3C8199A513200D0389E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03BBA3C7199A513200D0389E /* Images.xcassets */; };
 		03BBA3CF199A513300D0389E /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BBA3CE199A513300D0389E /* XCTest.framework */; };
 		03BBA3D0199A513300D0389E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BBA3AF199A513100D0389E /* Foundation.framework */; };
 		03BBA3D1199A513300D0389E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BBA3B3199A513100D0389E /* UIKit.framework */; };
 		03BBA3D9199A513300D0389E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 03BBA3D7199A513300D0389E /* InfoPlist.strings */; };
 		03BBA3DB199A513300D0389E /* TwitterStreamExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BBA3DA199A513300D0389E /* TwitterStreamExampleTests.m */; };
+		03BBA3E6199A51FB00D0389E /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BBA3E4199A51FB00D0389E /* Accounts.framework */; };
+		03BBA3E7199A51FB00D0389E /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BBA3E5199A51FB00D0389E /* Social.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,14 +47,16 @@
 		03BBA3BE199A513100D0389E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		03BBA3BF199A513100D0389E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		03BBA3C2199A513200D0389E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		03BBA3C4199A513200D0389E /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		03BBA3C5199A513200D0389E /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		03BBA3C4199A513200D0389E /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		03BBA3C5199A513200D0389E /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		03BBA3C7199A513200D0389E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		03BBA3CD199A513300D0389E /* TwitterStreamExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TwitterStreamExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		03BBA3CE199A513300D0389E /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		03BBA3D6199A513300D0389E /* TwitterStreamExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "TwitterStreamExampleTests-Info.plist"; sourceTree = "<group>"; };
 		03BBA3D8199A513300D0389E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		03BBA3DA199A513300D0389E /* TwitterStreamExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TwitterStreamExampleTests.m; sourceTree = "<group>"; };
+		03BBA3E4199A51FB00D0389E /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		03BBA3E5199A51FB00D0389E /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +64,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03BBA3E6199A51FB00D0389E /* Accounts.framework in Frameworks */,
+				03BBA3E7199A51FB00D0389E /* Social.framework in Frameworks */,
 				03BBA3B2199A513100D0389E /* CoreGraphics.framework in Frameworks */,
 				03BBA3B4199A513100D0389E /* UIKit.framework in Frameworks */,
 				03BBA3B0199A513100D0389E /* Foundation.framework in Frameworks */,
@@ -101,6 +107,8 @@
 		03BBA3AE199A513100D0389E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				03BBA3E4199A51FB00D0389E /* Accounts.framework */,
+				03BBA3E5199A51FB00D0389E /* Social.framework */,
 				03BBA3AF199A513100D0389E /* Foundation.framework */,
 				03BBA3B1199A513100D0389E /* CoreGraphics.framework */,
 				03BBA3B3199A513100D0389E /* UIKit.framework */,
@@ -115,8 +123,8 @@
 				03BBA3BE199A513100D0389E /* AppDelegate.h */,
 				03BBA3BF199A513100D0389E /* AppDelegate.m */,
 				03BBA3C1199A513200D0389E /* Main.storyboard */,
-				03BBA3C4199A513200D0389E /* ViewController.h */,
-				03BBA3C5199A513200D0389E /* ViewController.m */,
+				03BBA3C4199A513200D0389E /* MainViewController.h */,
+				03BBA3C5199A513200D0389E /* MainViewController.m */,
 				03BBA3C7199A513200D0389E /* Images.xcassets */,
 				03BBA3B6199A513100D0389E /* Supporting Files */,
 			);
@@ -249,7 +257,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03BBA3C6199A513200D0389E /* ViewController.m in Sources */,
+				03BBA3C6199A513200D0389E /* MainViewController.m in Sources */,
 				03BBA3C0199A513100D0389E /* AppDelegate.m in Sources */,
 				03BBA3BC199A513100D0389E /* main.m in Sources */,
 			);
