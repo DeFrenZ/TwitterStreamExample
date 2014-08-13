@@ -11,11 +11,5 @@
 #import <Social/Social.h>
 
 
-@interface MainViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
-
-
-@property (strong, nonatomic) IBOutlet UITableView *twitterTableView;
-
-@property (strong, nonatomic) NSArray *tweetsArray;
-
+@interface MainViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate>
 @end
