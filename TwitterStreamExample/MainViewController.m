@@ -7,18 +7,20 @@
 //
 
 #import "MainViewController.h"
+#import "TweetCell.h"
 
 #define ALPHA_TRANSPARENT 0.0
 #define ALPHA_OPAQUE 1.0
-#define LOADING_ANIMATION_DURATION 0.4
+#define FADING_ANIMATION_DURATION 0.4
 #define LOADING_VIEW_CORNER_RADIUS 20.0
+#define NUMBER_OF_TWEETS_SHOWN 10
 
 
 @interface MainViewController ()
 
 @property (strong, nonatomic) NSArray *twitterAccountsList;
 @property (strong, nonatomic) ACAccount *twitterAccount;
-@property (strong, nonatomic) NSArray *tweetsArray;
+@property (strong, nonatomic) NSMutableArray *tweetsArray;
 
 @property (strong, nonatomic) IBOutlet UIButton *accountSelectionButton;
 @property (strong, nonatomic) IBOutlet UIView *loadingView;
@@ -42,13 +44,19 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
 	static NSString *cellID = @"Cell";
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+	TweetCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
 	if (cell == nil) {
-		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+		// cell = [[TweetCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+		NSLog(@"Request for a new Cell");
 	}
 	
-	id cellData = [self.tweetsArray objectAtIndex:[indexPath row]];
-	// set cellData in cell
+	NSDictionary *cellData = [self.tweetsArray objectAtIndex:[indexPath row]];
+	
+	[cell setAndLoadProfileImageFromURL:[NSURL URLWithString:[[cellData objectForKey:@"user"] objectForKey:@"profile_image_url"]]];
+	[[cell usernameLabel] setText:[[cellData objectForKey:@"user"] objectForKey:@"name"]];
+	[[cell screenNameLabel] setText:[[cellData objectForKey:@"user"] objectForKey:@"screen_name"]];
+	[[cell tweetTextLabel] setText:[cellData objectForKey:@"text"]];
+	
 	return cell;
 }
 
@@ -62,6 +70,20 @@
 		ACAccount *selectedAccount = [self.twitterAccountsList objectAtIndex:buttonIndex];
 		self.twitterAccount = selectedAccount;
 		[self didSetTwitterAccount];
+	}
+}
+
+#pragma mark - NSURLConnectionDelegate
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+	NSError *JSONError;
+	NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&JSONError];
+	if (dataDictionary == nil) {
+		NSLog(@"JSON Error: %@. Data is %d bytes.", [JSONError localizedDescription], [data length]);
+	} else {
+		NSLog(@"Received Data: %@", dataDictionary);
+		[self addTweet:dataDictionary];
 	}
 }
 
@@ -87,26 +109,51 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - MainViewController (Loading)
+#pragma mark - MainViewController
+
+- (void)showTableView:(BOOL)showTable
+{
+	[self.view setUserInteractionEnabled:NO];
+	[UIView animateWithDuration:FADING_ANIMATION_DURATION animations:^{
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[self.twitterTableView setAlpha:(showTable)? ALPHA_OPAQUE : ALPHA_TRANSPARENT];
+			[self.accountSelectionButton setAlpha:(showTable)? ALPHA_TRANSPARENT : ALPHA_OPAQUE];
+		});
+	} completion:^(BOOL finished) {
+		[self.view setUserInteractionEnabled:YES];
+	}];
+}
+
+- (void)addTweet:(NSDictionary *)tweetDictionary
+{
+	[self.tweetsArray insertObject:tweetDictionary atIndex:0];
+	while ([self.tweetsArray count] > NUMBER_OF_TWEETS_SHOWN) {
+		[self.tweetsArray removeLastObject];
+	}
+	
+	[self.twitterTableView reloadData];
+}
+
+#pragma mark MainViewController (Loading)
 
 - (void)startLoading
 {
 	[self.view setUserInteractionEnabled:NO];
-	[UIView animateWithDuration:LOADING_ANIMATION_DURATION animations:^{
+	[UIView animateWithDuration:FADING_ANIMATION_DURATION animations:^{
 		[self.loadingView setAlpha:ALPHA_OPAQUE];
 	}];
 }
 
 - (void)finishLoading
 {
-	[UIView animateWithDuration:LOADING_ANIMATION_DURATION animations:^{
+	[UIView animateWithDuration:FADING_ANIMATION_DURATION animations:^{
 		[self.loadingView setAlpha:ALPHA_TRANSPARENT];
 	} completion:^(BOOL finished) {
 		[self.view setUserInteractionEnabled:YES];
 	}];
 }
 
-#pragma mark - MainViewController (Twitter)
+#pragma mark MainViewController (Twitter)
 
 - (void)createTwitterAccount
 {
@@ -162,28 +209,19 @@
 - (void)didSetTwitterAccount
 {
 	NSLog(@"Twitter account selected: %@", [self.twitterAccount username]);
+	[self showTableView:YES];
+	[self sendRequestWithTwitterAccount:self.twitterAccount];
 }
 
 - (void)sendRequestWithTwitterAccount:(ACAccount *)account
 {
-#warning change service to access to
-	NSURL *requestURL = [NSURL URLWithString:@"https://api.twitter.com/1.1/statuses/user_timeline.json"];
-	NSDictionary *parameters = @{@"screen_name" : @"@techotopia",
-								 @"include_rts" : @"0",
-								 @"trim_user" : @"1",
-								 @"count" : @"20"};
-	SLRequest *postRequest = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodGET URL:requestURL parameters:parameters];
-	postRequest.account = account;
+	NSURL *requestURL = [NSURL URLWithString:@"https://stream.twitter.com/1.1/statuses/filter.json"];
+	NSDictionary *requestParameters = @{@"track" : @"banking"};
+	SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodPOST URL:requestURL parameters:requestParameters];
+	request.account = account;
 	
-	[postRequest performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
-		self.tweetsArray = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableLeaves error:&error];
-		
-		if (self.tweetsArray.count != 0) {
-			dispatch_async(dispatch_get_main_queue(), ^{
-				[self.twitterTableView reloadData];
-			});
-		}
-	}];
+	NSURLConnection *connection = [NSURLConnection connectionWithRequest:[request preparedURLRequest] delegate:self];
+	[connection start];
 }
 
 

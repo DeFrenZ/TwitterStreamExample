@@ -11,5 +11,5 @@
 #import <Social/Social.h>
 
 
-@interface MainViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate>
+@interface MainViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, NSURLConnectionDataDelegate>
 @end

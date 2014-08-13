@@ -23,6 +23,7 @@
 		03BBA3DB199A513300D0389E /* TwitterStreamExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BBA3DA199A513300D0389E /* TwitterStreamExampleTests.m */; };
 		03BBA3E6199A51FB00D0389E /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BBA3E4199A51FB00D0389E /* Accounts.framework */; };
 		03BBA3E7199A51FB00D0389E /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BBA3E5199A51FB00D0389E /* Social.framework */; };
+		03BBA3EA199C158900D0389E /* TweetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BBA3E9199C158900D0389E /* TweetCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,8 @@
 		03BBA3DA199A513300D0389E /* TwitterStreamExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TwitterStreamExampleTests.m; sourceTree = "<group>"; };
 		03BBA3E4199A51FB00D0389E /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		03BBA3E5199A51FB00D0389E /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		03BBA3E8199C158800D0389E /* TweetCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TweetCell.h; sourceTree = "<group>"; };
+		03BBA3E9199C158900D0389E /* TweetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TweetCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,6 +128,8 @@
 				03BBA3C1199A513200D0389E /* Main.storyboard */,
 				03BBA3C4199A513200D0389E /* MainViewController.h */,
 				03BBA3C5199A513200D0389E /* MainViewController.m */,
+				03BBA3E8199C158800D0389E /* TweetCell.h */,
+				03BBA3E9199C158900D0389E /* TweetCell.m */,
 				03BBA3C7199A513200D0389E /* Images.xcassets */,
 				03BBA3B6199A513100D0389E /* Supporting Files */,
 			);
@@ -260,6 +265,7 @@
 				03BBA3C6199A513200D0389E /* MainViewController.m in Sources */,
 				03BBA3C0199A513100D0389E /* AppDelegate.m in Sources */,
 				03BBA3BC199A513100D0389E /* main.m in Sources */,
+				03BBA3EA199C158900D0389E /* TweetCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
