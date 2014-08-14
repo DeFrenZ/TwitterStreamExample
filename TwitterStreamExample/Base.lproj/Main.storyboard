@@ -21,11 +21,11 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="80" id="UL0-y8-wai" customClass="TweetCell">
-                                        <rect key="frame" x="0.0" y="22" width="320" height="80"/>
+                                    <tableViewCell userInteractionEnabled="NO" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" rowHeight="69" id="UL0-y8-wai" customClass="TweetCell">
+                                        <rect key="frame" x="0.0" y="22" width="320" height="69"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="UL0-y8-wai" id="c9v-42-mk4">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="79"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="68"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hUL-Hg-V1Y">
@@ -56,7 +56,7 @@
                                                     <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="242" placeholderIntrinsicHeight="18" text="Tweet Text" lineBreakMode="wordWrap" numberOfLines="140" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="242" translatesAutoresizingMaskIntoConstraints="NO" id="vwq-gL-lhh">
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="242" placeholderIntrinsicHeight="18" text="Tweet Text" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="242" translatesAutoresizingMaskIntoConstraints="NO" id="vwq-gL-lhh">
                                                     <rect key="frame" x="68" y="40" width="242" height="18"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <constraints>
@@ -74,7 +74,7 @@
                                                 <constraint firstItem="Ut6-eI-jnQ" firstAttribute="leading" secondItem="ZAJ-PN-6mI" secondAttribute="leading" id="Lzm-3t-AJP"/>
                                                 <constraint firstItem="Ut6-eI-jnQ" firstAttribute="top" secondItem="hUL-Hg-V1Y" secondAttribute="top" id="Pte-Tz-LVu"/>
                                                 <constraint firstItem="Ut6-eI-jnQ" firstAttribute="baseline" secondItem="ZAJ-PN-6mI" secondAttribute="baseline" constant="-12" id="Rjk-wn-Kkt"/>
-                                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="vwq-gL-lhh" secondAttribute="bottom" constant="10" id="V0R-2n-vvC"/>
+                                                <constraint firstAttribute="bottom" secondItem="vwq-gL-lhh" secondAttribute="bottom" constant="10" id="V0R-2n-vvC"/>
                                                 <constraint firstItem="hUL-Hg-V1Y" firstAttribute="leading" secondItem="c9v-42-mk4" secondAttribute="leading" constant="10" id="Wgi-0l-hTe"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Ut6-eI-jnQ" secondAttribute="trailing" constant="10" id="bs5-tI-735"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ZAJ-PN-6mI" secondAttribute="trailing" constant="10" id="m8m-WI-4PA"/>

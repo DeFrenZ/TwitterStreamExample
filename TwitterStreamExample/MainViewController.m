@@ -12,6 +12,8 @@
 #define ALPHA_TRANSPARENT 0.0
 #define ALPHA_OPAQUE 1.0
 #define FADING_ANIMATION_DURATION 0.4
+#define TABLE_CELL_SEPARATOR_HEIGHT 1.0
+#define STATUS_BAR_HEIGHT 20.0
 #define LOADING_VIEW_CORNER_RADIUS 20.0
 #define NUMBER_OF_TWEETS_SHOWN 10
 
@@ -21,6 +23,7 @@
 @property (strong, nonatomic) NSArray *twitterAccountsList;
 @property (strong, nonatomic) ACAccount *twitterAccount;
 @property (strong, nonatomic) NSMutableArray *tweetsArray;
+@property (strong, nonatomic) TweetCell *prototypeCell;
 
 @property (strong, nonatomic) IBOutlet UIButton *accountSelectionButton;
 @property (strong, nonatomic) IBOutlet UIView *loadingView;
@@ -41,23 +44,48 @@
 
 #pragma mark - UITableViewDelegate
 
+static NSString *cellID = @"Cell";
+
+- (TweetCell *)prototypeCell
+{
+	if (!_prototypeCell) {
+		_prototypeCell = [self.twitterTableView dequeueReusableCellWithIdentifier:cellID];
+	}
+	return _prototypeCell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	[self configureCell:self.prototypeCell forRowAtIndexPath:indexPath];
+	[self.prototypeCell layoutIfNeeded];
+	
+	CGSize cellSize = [self.prototypeCell.contentView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize];
+	return cellSize.height + TABLE_CELL_SEPARATOR_HEIGHT;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	return UITableViewAutomaticDimension;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	static NSString *cellID = @"Cell";
 	TweetCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-	if (cell == nil) {
-		// cell = [[TweetCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-		NSLog(@"Request for a new Cell");
-	}
-	
-	NSDictionary *cellData = [self.tweetsArray objectAtIndex:[indexPath row]];
-	
-	[cell setAndLoadProfileImageFromURL:[NSURL URLWithString:[[cellData objectForKey:@"user"] objectForKey:@"profile_image_url"]]];
-	[[cell usernameLabel] setText:[[cellData objectForKey:@"user"] objectForKey:@"name"]];
-	[[cell screenNameLabel] setText:[[cellData objectForKey:@"user"] objectForKey:@"screen_name"]];
-	[[cell tweetTextLabel] setText:[cellData objectForKey:@"text"]];
-	
+	[self configureCell:cell forRowAtIndexPath:indexPath];
 	return cell;
+}
+
+- (void)configureCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	if ([cell isKindOfClass:[TweetCell class]]) {
+		TweetCell *tweetCell = (TweetCell *)cell;
+		NSDictionary *cellData = [self.tweetsArray objectAtIndex:[indexPath row]];
+		
+		[tweetCell setAndLoadProfileImageFromURL:[NSURL URLWithString:[[cellData objectForKey:@"user"] objectForKey:@"profile_image_url"]]];
+		[[tweetCell usernameLabel] setText:[[cellData objectForKey:@"user"] objectForKey:@"name"]];
+		[[tweetCell screenNameLabel] setText:[NSString stringWithFormat:@"@%@", [[cellData objectForKey:@"user"] objectForKey:@"screen_name"]]];
+		[[tweetCell tweetTextLabel] setText:[cellData objectForKey:@"text"]];
+	}
 }
 
 #pragma mark - UIActionSheetDelegate
@@ -82,7 +110,8 @@
 	if (dataDictionary == nil) {
 		NSLog(@"JSON Error: %@. Data is %d bytes.", [JSONError localizedDescription], [data length]);
 	} else {
-		NSLog(@"Received Data: %@", dataDictionary);
+		// NSLog(@"Received Data: %@", dataDictionary);
+		NSLog(@"Received and correctly parsed %d bytes of data.", [data length]);
 		[self addTweet:dataDictionary];
 	}
 }
@@ -100,7 +129,12 @@
 {
 	[super viewDidLoad];
 	
+	self.tweetsArray = [NSMutableArray arrayWithCapacity:NUMBER_OF_TWEETS_SHOWN];
 	[self.loadingView.layer setCornerRadius:LOADING_VIEW_CORNER_RADIUS];
+	
+	NSLog(@"Old Top Insets: %f", [self.twitterTableView contentInset].top);
+	[self.twitterTableView setContentInset:UIEdgeInsetsMake(STATUS_BAR_HEIGHT, self.twitterTableView.contentInset.left, self.twitterTableView.contentInset.bottom, self.twitterTableView.contentInset.right)];
+	NSLog(@"New Top Insets: %f", [self.twitterTableView contentInset].top);
 }
 
 - (void)didReceiveMemoryWarning
@@ -127,11 +161,14 @@
 - (void)addTweet:(NSDictionary *)tweetDictionary
 {
 	[self.tweetsArray insertObject:tweetDictionary atIndex:0];
-	while ([self.tweetsArray count] > NUMBER_OF_TWEETS_SHOWN) {
-		[self.tweetsArray removeLastObject];
-	}
 	
-	[self.twitterTableView reloadData];
+	[self.twitterTableView beginUpdates]; {
+		if ([self.tweetsArray count] > NUMBER_OF_TWEETS_SHOWN) {
+			[self.twitterTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(NUMBER_OF_TWEETS_SHOWN - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
+			[self.tweetsArray removeLastObject];
+		}
+		[self.twitterTableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
+	} [self.twitterTableView endUpdates];
 }
 
 #pragma mark MainViewController (Loading)
