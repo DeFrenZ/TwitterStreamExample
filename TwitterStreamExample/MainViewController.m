@@ -20,6 +20,7 @@
 
 @interface MainViewController ()
 
+@property (strong, nonatomic) NSCache *profileImagesCache;
 @property (strong, nonatomic) NSArray *twitterAccountsList;
 @property (strong, nonatomic) ACAccount *twitterAccount;
 @property (strong, nonatomic) NSMutableArray *tweetsArray;
@@ -77,8 +78,11 @@ static NSString *cellID = @"Cell";
 
 - (void)configureCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+#warning check for visualization bug
+#warning could make the first cell appear as an UIActivityIndicatorView to let the user know it is doing something (waiting for tweets)
 	if ([cell isKindOfClass:[TweetCell class]]) {
 		TweetCell *tweetCell = (TweetCell *)cell;
+		tweetCell.profileImageCache = self.profileImagesCache;
 		NSDictionary *cellData = [self.tweetsArray objectAtIndex:[indexPath row]];
 		
 		[tweetCell setAndLoadProfileImageFromURL:[NSURL URLWithString:[[cellData objectForKey:@"user"] objectForKey:@"profile_image_url"]]];
@@ -130,11 +134,11 @@ static NSString *cellID = @"Cell";
 	[super viewDidLoad];
 	
 	self.tweetsArray = [NSMutableArray arrayWithCapacity:NUMBER_OF_TWEETS_SHOWN];
-	[self.loadingView.layer setCornerRadius:LOADING_VIEW_CORNER_RADIUS];
+	self.profileImagesCache = [NSCache new];
 	
-	NSLog(@"Old Top Insets: %f", [self.twitterTableView contentInset].top);
+	[self.loadingView.layer setCornerRadius:LOADING_VIEW_CORNER_RADIUS];
 	[self.twitterTableView setContentInset:UIEdgeInsetsMake(STATUS_BAR_HEIGHT, self.twitterTableView.contentInset.left, self.twitterTableView.contentInset.bottom, self.twitterTableView.contentInset.right)];
-	NSLog(@"New Top Insets: %f", [self.twitterTableView contentInset].top);
+#warning could download an inital set of latest tweets before starting the stream
 }
 
 - (void)didReceiveMemoryWarning

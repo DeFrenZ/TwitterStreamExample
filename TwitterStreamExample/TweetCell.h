@@ -12,6 +12,7 @@
 @interface TweetCell : UITableViewCell
 
 @property (strong, nonatomic) NSURL *profileImageURL;
+@property (weak, nonatomic) NSCache *profileImageCache;
 
 @property (strong, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (strong, nonatomic) IBOutlet UILabel *usernameLabel;

@@ -9,41 +9,34 @@
 #import "TweetCell.h"
 
 
-@interface TweetCell ()
-
-@end
-
-
 @implementation TweetCell
-
-#pragma mark - UITableViewCell
-
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self) {
-        // Initialization code
-    }
-    return self;
-}
-
-- (void)awakeFromNib
-{
-    // Initialization code
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
 
 #pragma mark - TweetCell
 
 - (void)loadProfileImage
 {
-#warning load profileImage from profileImageURL and set on profileImageView
+	if (self.profileImageURL != nil) {
+		if (self.profileImageCache != nil) {
+			UIImage *profileImage = [self.profileImageCache objectForKey:self.profileImageURL];
+			if (profileImage != nil) {
+				[self.profileImageView setImage:profileImage];
+			} else {
+#warning Could make the download with NSURLConnection to be less computationally expensive
+#warning Could make a UIActivityIndicatorView appear while downloading the profile image
+				dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+					NSData *profileImageData = [NSData dataWithContentsOfURL:self.profileImageURL];
+					UIImage *downloadedProfileImage = [UIImage imageWithData:profileImageData];
+					dispatch_sync(dispatch_get_main_queue(), ^{
+						[self.profileImageView setImage:downloadedProfileImage];
+					});
+				});
+			}
+		} else {
+			NSLog(@"Trying to retrieve the profile image without having a cache set.");
+		}
+	} else {
+		NSLog(@"Trying to retrieve the profile image without having an URL.");
+	}
 }
 
 - (void)setAndLoadProfileImageFromURL:(NSURL *)URL
