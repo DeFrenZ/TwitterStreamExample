@@ -57,6 +57,7 @@ static NSString *cellID = @"Cell";
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+#warning could be made faster by getting the constraints' lenghts and using sizeWithFont:
 	[self configureCell:self.prototypeCell forRowAtIndexPath:indexPath];
 	[self.prototypeCell layoutIfNeeded];
 	
@@ -78,7 +79,6 @@ static NSString *cellID = @"Cell";
 
 - (void)configureCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-#warning check for visualization bug
 #warning could make the first cell appear as an UIActivityIndicatorView to let the user know it is doing something (waiting for tweets)
 	if ([cell isKindOfClass:[TweetCell class]]) {
 		TweetCell *tweetCell = (TweetCell *)cell;
@@ -86,9 +86,9 @@ static NSString *cellID = @"Cell";
 		NSDictionary *cellData = [self.tweetsArray objectAtIndex:[indexPath row]];
 		
 		[tweetCell setAndLoadProfileImageFromURL:[NSURL URLWithString:[[cellData objectForKey:@"user"] objectForKey:@"profile_image_url"]]];
-		[[tweetCell usernameLabel] setText:[[cellData objectForKey:@"user"] objectForKey:@"name"]];
-		[[tweetCell screenNameLabel] setText:[NSString stringWithFormat:@"@%@", [[cellData objectForKey:@"user"] objectForKey:@"screen_name"]]];
-		[[tweetCell tweetTextLabel] setText:[cellData objectForKey:@"text"]];
+		[tweetCell.usernameLabel setText:[[cellData objectForKey:@"user"] objectForKey:@"name"]];
+		[tweetCell.screenNameLabel setText:[NSString stringWithFormat:@"@%@", [[cellData objectForKey:@"user"] objectForKey:@"screen_name"]]];
+		[tweetCell.tweetTextLabel setText:[cellData objectForKey:@"text"]];
 	}
 }
 
@@ -114,7 +114,6 @@ static NSString *cellID = @"Cell";
 	if (dataDictionary == nil) {
 		NSLog(@"JSON Error: %@. Data is %d bytes.", [JSONError localizedDescription], [data length]);
 	} else {
-		// NSLog(@"Received Data: %@", dataDictionary);
 		NSLog(@"Received and correctly parsed %d bytes of data.", [data length]);
 		[self addTweet:dataDictionary];
 	}
@@ -138,7 +137,6 @@ static NSString *cellID = @"Cell";
 	
 	[self.loadingView.layer setCornerRadius:LOADING_VIEW_CORNER_RADIUS];
 	[self.twitterTableView setContentInset:UIEdgeInsetsMake(STATUS_BAR_HEIGHT, self.twitterTableView.contentInset.left, self.twitterTableView.contentInset.bottom, self.twitterTableView.contentInset.right)];
-#warning could download an inital set of latest tweets before starting the stream
 }
 
 - (void)didReceiveMemoryWarning

@@ -21,6 +21,7 @@
 			if (profileImage != nil) {
 				[self.profileImageView setImage:profileImage];
 			} else {
+#warning Could use the popular SDWebImage library but wanted to do without using 3rd party libraries for now
 #warning Could make the download with NSURLConnection to be less computationally expensive
 #warning Could make a UIActivityIndicatorView appear while downloading the profile image
 				dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
