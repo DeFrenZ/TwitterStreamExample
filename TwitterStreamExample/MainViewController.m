@@ -17,7 +17,6 @@
 #define LOADING_VIEW_CORNER_RADIUS 20.0
 #define NUMBER_OF_TWEETS_SHOWN 10
 
-
 @interface MainViewController ()
 
 @property (strong, nonatomic) NSCache *profileImagesCache;
@@ -262,6 +261,5 @@ static NSString *cellID = @"Cell";
 	NSURLConnection *connection = [NSURLConnection connectionWithRequest:[request preparedURLRequest] delegate:self];
 	[connection start];
 }
-
 
 @end

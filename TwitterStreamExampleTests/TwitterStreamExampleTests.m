@@ -6,11 +6,12 @@
 //  Copyright (c) 2014 Davide De Franceschi. All rights reserved.
 //
 
-#import <XCTest/XCTest.h>
+@import XCTest;
 
 @interface TwitterStreamExampleTests : XCTestCase
 
 @end
+
 
 @implementation TwitterStreamExampleTests
 
@@ -26,9 +27,11 @@
     [super tearDown];
 }
 
+/*
 - (void)testExample
 {
-    // XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
 }
+ */
 
 @end

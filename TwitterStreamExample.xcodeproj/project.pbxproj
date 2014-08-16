@@ -21,8 +21,6 @@
 		03BBA3D1199A513300D0389E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BBA3B3199A513100D0389E /* UIKit.framework */; };
 		03BBA3D9199A513300D0389E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 03BBA3D7199A513300D0389E /* InfoPlist.strings */; };
 		03BBA3DB199A513300D0389E /* TwitterStreamExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BBA3DA199A513300D0389E /* TwitterStreamExampleTests.m */; };
-		03BBA3E6199A51FB00D0389E /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BBA3E4199A51FB00D0389E /* Accounts.framework */; };
-		03BBA3E7199A51FB00D0389E /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BBA3E5199A51FB00D0389E /* Social.framework */; };
 		03BBA3EA199C158900D0389E /* TweetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 03BBA3E9199C158900D0389E /* TweetCell.m */; };
 /* End PBXBuildFile section */
 
@@ -67,8 +65,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03BBA3E6199A51FB00D0389E /* Accounts.framework in Frameworks */,
-				03BBA3E7199A51FB00D0389E /* Social.framework in Frameworks */,
 				03BBA3B2199A513100D0389E /* CoreGraphics.framework in Frameworks */,
 				03BBA3B4199A513100D0389E /* UIKit.framework in Frameworks */,
 				03BBA3B0199A513100D0389E /* Foundation.framework in Frameworks */,
@@ -470,6 +466,7 @@
 				03BBA3E0199A513300D0389E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		03BBA3E1199A513300D0389E /* Build configuration list for PBXNativeTarget "TwitterStreamExampleTests" */ = {
 			isa = XCConfigurationList;
@@ -478,6 +475,7 @@
 				03BBA3E3199A513300D0389E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

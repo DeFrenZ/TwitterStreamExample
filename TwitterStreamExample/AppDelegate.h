@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Davide De Franceschi. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+@import UIKit;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

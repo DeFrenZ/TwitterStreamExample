@@ -6,10 +6,9 @@
 //  Copyright (c) 2014 Davide De Franceschi. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <Accounts/Accounts.h>
-#import <Social/Social.h>
-
+@import UIKit;
+@import Accounts;
+@import Social;
 
 @interface MainViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, NSURLConnectionDataDelegate>
 @end

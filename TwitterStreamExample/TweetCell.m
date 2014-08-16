@@ -8,7 +8,6 @@
 
 #import "TweetCell.h"
 
-
 @implementation TweetCell
 
 #pragma mark - TweetCell
@@ -45,6 +44,5 @@
 	self.profileImageURL = URL;
 	[self loadProfileImage];
 }
-
 
 @end

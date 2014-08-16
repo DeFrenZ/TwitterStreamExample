@@ -6,8 +6,7 @@
 //  Copyright (c) 2014 Davide De Franceschi. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
+@import UIKit;
 
 @interface TweetCell : UITableViewCell
 
@@ -19,9 +18,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *screenNameLabel;
 @property (strong, nonatomic) IBOutlet UILabel *tweetTextLabel;
 
-
 - (void)loadProfileImage;
 - (void)setAndLoadProfileImageFromURL:(NSURL *)URL;
-
 
 @end
