@@ -82,12 +82,12 @@ static NSString *cellID = @"Cell";
 	if ([cell isKindOfClass:[TweetCell class]]) {
 		TweetCell *tweetCell = (TweetCell *)cell;
 		tweetCell.profileImageCache = self.profileImagesCache;
-		NSDictionary *cellData = [self.tweetsArray objectAtIndex:[indexPath row]];
+		NSDictionary *cellData = self.tweetsArray[[indexPath row]];
 		
-		[tweetCell setAndLoadProfileImageFromURL:[NSURL URLWithString:[[cellData objectForKey:@"user"] objectForKey:@"profile_image_url"]]];
-		[tweetCell.usernameLabel setText:[[cellData objectForKey:@"user"] objectForKey:@"name"]];
-		[tweetCell.screenNameLabel setText:[NSString stringWithFormat:@"@%@", [[cellData objectForKey:@"user"] objectForKey:@"screen_name"]]];
-		[tweetCell.tweetTextLabel setText:[cellData objectForKey:@"text"]];
+		[tweetCell setAndLoadProfileImageFromURL:[NSURL URLWithString:cellData[@"user"][@"profile_image_url"]]];
+		[tweetCell.usernameLabel setText:cellData[@"user"][@"name"]];
+		[tweetCell.screenNameLabel setText:[NSString stringWithFormat:@"@%@", cellData[@"user"][@"screen_name"]]];
+		[tweetCell.tweetTextLabel setText:cellData[@"text"]];
 	}
 }
 
@@ -98,7 +98,7 @@ static NSString *cellID = @"Cell";
 	if (buttonIndex == [actionSheet cancelButtonIndex]) {
 		self.twitterAccount = nil;
 	} else {
-		ACAccount *selectedAccount = [self.twitterAccountsList objectAtIndex:buttonIndex];
+		ACAccount *selectedAccount = self.twitterAccountsList[buttonIndex];
 		self.twitterAccount = selectedAccount;
 		[self didSetTwitterAccount];
 	}
@@ -165,10 +165,10 @@ static NSString *cellID = @"Cell";
 	
 	[self.twitterTableView beginUpdates]; {
 		if ([self.tweetsArray count] > NUMBER_OF_TWEETS_SHOWN) {
-			[self.twitterTableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:(NUMBER_OF_TWEETS_SHOWN - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
+			[self.twitterTableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(NUMBER_OF_TWEETS_SHOWN - 1) inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
 			[self.tweetsArray removeLastObject];
 		}
-		[self.twitterTableView insertRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
+		[self.twitterTableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationTop];
 	} [self.twitterTableView endUpdates];
 }
 
@@ -220,7 +220,7 @@ static NSString *cellID = @"Cell";
 	} else if (numberOfTwitterAccounts > 1) {
 		[self selectTwitterAccountFromArray:twitterAccounts];
 	} else {
-		self.twitterAccount = [twitterAccounts firstObject];
+		self.twitterAccount = twitterAccounts[0];
 		[self didSetTwitterAccount];
 	}
 }
@@ -254,7 +254,7 @@ static NSString *cellID = @"Cell";
 - (void)sendRequestWithTwitterAccount:(ACAccount *)account
 {
 	NSURL *requestURL = [NSURL URLWithString:@"https://stream.twitter.com/1.1/statuses/filter.json"];
-	NSDictionary *requestParameters = @{@"track" : @"banking"};
+	NSDictionary *requestParameters = @{@"track": @"banking"};
 	SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodPOST URL:requestURL parameters:requestParameters];
 	request.account = account;
 	
