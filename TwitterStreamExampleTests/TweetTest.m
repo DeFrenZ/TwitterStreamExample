@@ -20,6 +20,7 @@
 - (void)setUp
 {
 	[super setUp];
+	
 	self.exampleDictionary = @{@"user": @{@"name": @"Test User",
 										  @"profile_image_url": @"http://www.example.com/test_img_url.jpg",
 										  @"screen_name": @"testuser"},

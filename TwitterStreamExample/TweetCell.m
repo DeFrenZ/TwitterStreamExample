@@ -10,29 +10,18 @@
 
 @implementation TweetCell
 
-#pragma mark - TweetCell
+#pragma mark TweetCell
 
 - (void)loadProfileImage
 {
 	if (self.profileImageURL != nil) {
-		if (self.profileImageCache != nil) {
-			UIImage *profileImage = [self.profileImageCache objectForKey:self.profileImageURL];
-			if (profileImage != nil) {
-				[self.profileImageView setImage:profileImage];
-			} else {
-#warning Could use the popular SDWebImage library but wanted to do without using 3rd party libraries for now
-#warning Could make the download with NSURLConnection to be less computationally expensive
+		if (self.profileImageDownloader != nil) {
 #warning Could make a UIActivityIndicatorView appear while downloading the profile image
-				dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-					NSData *profileImageData = [NSData dataWithContentsOfURL:self.profileImageURL];
-					UIImage *downloadedProfileImage = [UIImage imageWithData:profileImageData];
-					dispatch_sync(dispatch_get_main_queue(), ^{
-						[self.profileImageView setImage:downloadedProfileImage];
-					});
-				});
-			}
+			[self.profileImageDownloader downloadImageFromURL:self.profileImageURL completion:^(UIImage *downloadedImage) {
+				[self.profileImageView setImage:downloadedImage];
+			}];
 		} else {
-			NSLog(@"Trying to retrieve the profile image without having a cache set.");
+			NSLog(@"Trying to retrieve the profile image without having a downloader set.");
 		}
 	} else {
 		NSLog(@"Trying to retrieve the profile image without having an URL.");

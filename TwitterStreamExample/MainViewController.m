@@ -9,6 +9,7 @@
 #import "MainViewController.h"
 #import "TweetCell.h"
 #import "Tweet.h"
+#import "WebImageDownloader.h"
 
 #define ALPHA_TRANSPARENT 0.0
 #define ALPHA_OPAQUE 1.0
@@ -17,10 +18,11 @@
 #define STATUS_BAR_HEIGHT 20.0
 #define LOADING_VIEW_CORNER_RADIUS 20.0
 #define NUMBER_OF_TWEETS_SHOWN 10
+#pragma mark -
 
 @interface MainViewController ()
 
-@property (strong, nonatomic) NSCache *profileImagesCache;
+@property (strong, nonatomic) WebImageDownloader *profileImagesDownloader;
 @property (strong, nonatomic) NSArray *twitterAccountsList;
 @property (strong, nonatomic) ACAccount *twitterAccount;
 @property (strong, nonatomic) NSMutableArray *tweetsArray;
@@ -36,14 +38,14 @@
 
 @implementation MainViewController
 
-#pragma mark - UITableViewDataSource
+#pragma mark UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	return [self.tweetsArray count];
 }
 
-#pragma mark - UITableViewDelegate
+#pragma mark UITableViewDelegate
 
 static NSString *cellID = @"Cell";
 
@@ -82,7 +84,7 @@ static NSString *cellID = @"Cell";
 #warning could make the first cell appear as an UIActivityIndicatorView to let the user know it is doing something (waiting for tweets)
 	if ([cell isKindOfClass:[TweetCell class]]) {
 		TweetCell *tweetCell = (TweetCell *)cell;
-		tweetCell.profileImageCache = self.profileImagesCache;
+		tweetCell.profileImageDownloader = self.profileImagesDownloader;
 		Tweet *cellData = self.tweetsArray[[indexPath row]];
 		
 		[tweetCell setAndLoadProfileImageFromURL:cellData.user.profileImageURL];
@@ -92,7 +94,7 @@ static NSString *cellID = @"Cell";
 	}
 }
 
-#pragma mark - UIActionSheetDelegate
+#pragma mark UIActionSheetDelegate
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -105,7 +107,7 @@ static NSString *cellID = @"Cell";
 	}
 }
 
-#pragma mark - NSURLConnectionDelegate
+#pragma mark NSURLConnectionDelegate
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
@@ -116,21 +118,22 @@ static NSString *cellID = @"Cell";
 	}
 }
 
-#pragma mark - UIButton
+#pragma mark UIButton
 
 - (IBAction)accountSelectionButtonPressed:(id)sender
 {
 	[self requestTwitterAccount];
 }
 
-#pragma mark - UIViewController
+#pragma mark UIViewController
 
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
 	
 	self.tweetsArray = [NSMutableArray arrayWithCapacity:NUMBER_OF_TWEETS_SHOWN];
-	self.profileImagesCache = [NSCache new];
+	self.profileImagesDownloader = [WebImageDownloader new];
+#warning Could use the popular SDWebImage library but wanted to do without using 3rd party libraries for now
 	
 	[self.loadingView.layer setCornerRadius:LOADING_VIEW_CORNER_RADIUS];
 	[self.twitterTableView setContentInset:UIEdgeInsetsMake(STATUS_BAR_HEIGHT, self.twitterTableView.contentInset.left, self.twitterTableView.contentInset.bottom, self.twitterTableView.contentInset.right)];
@@ -142,7 +145,7 @@ static NSString *cellID = @"Cell";
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - MainViewController
+#pragma mark MainViewController
 
 - (void)showTableView:(BOOL)showTable
 {

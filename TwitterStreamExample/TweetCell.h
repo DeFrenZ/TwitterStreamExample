@@ -7,11 +7,12 @@
 //
 
 @import UIKit;
+#import "WebImageDownloader.h"
 
 @interface TweetCell : UITableViewCell
 
 @property (strong, nonatomic) NSURL *profileImageURL;
-@property (weak, nonatomic) NSCache *profileImageCache;
+@property (weak, nonatomic) WebImageDownloader *profileImageDownloader;
 
 @property (strong, nonatomic) IBOutlet UIImageView *profileImageView;
 @property (strong, nonatomic) IBOutlet UILabel *usernameLabel;
