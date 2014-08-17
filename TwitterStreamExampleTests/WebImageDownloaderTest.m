@@ -10,7 +10,7 @@
 #import "WebImageDownloader.h"
 
 #define TEST_TIMEOUT_TIME_S 2.0
-#define TEST_TIMEOUT_TIME_NS ((int64_t)(TEST_TIMEOUT_TIME_S * 1000000000))
+#define TEST_TIMEOUT_TIME_NS ((int64_t)(TEST_TIMEOUT_TIME_S * NSEC_PER_SEC))
 #pragma mark -
 
 @interface WebImageDownloaderTest : XCTestCase

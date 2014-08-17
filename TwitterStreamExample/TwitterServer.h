@@ -21,6 +21,7 @@
 @property (weak, nonatomic) id<TwitterServerDelegate> delegate;
 
 - (void)sendStreamingRequestWithParameters:(NSDictionary *)requestParameters;
+- (void)stopStreaming;
 
 @end
 
@@ -30,6 +31,9 @@
 
 @property (strong, nonatomic) Tweet *fakeTweet;
 @property NSTimeInterval timeInterval;
+
++ (instancetype)twitterFakeServerWithTweet:(Tweet *)tweet andInterval:(NSTimeInterval)interval;
+- (instancetype)initWithTweet:(Tweet *)tweet andInterval:(NSTimeInterval)interval;
 
 @end
 

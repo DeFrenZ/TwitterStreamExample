@@ -8,6 +8,12 @@
 
 #import "TwitterServer.h"
 
+@interface TwitterServer ()
+
+@property (strong, nonatomic) NSURLConnection *connection;
+
+@end
+
 @implementation TwitterServer
 
 #pragma mark NSURLConnectionDelegate
@@ -36,19 +42,65 @@ static NSString *serviceURLStreaming = @"https://stream.twitter.com/1.1/statuses
 	SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodPOST URL:requestURL parameters:requestParameters];
 	request.account = self.account;
 	
-	NSURLConnection *connection = [NSURLConnection connectionWithRequest:[request preparedURLRequest] delegate:self];
-	[connection start];
+	if (self.connection != nil) {
+		NSLog(@"WARNING: Possibly overwriting another active connection.");
+	}
+	self.connection = [NSURLConnection connectionWithRequest:[request preparedURLRequest] delegate:self];
+	[self.connection start];
+}
+
+- (void)stopStreaming
+{
+	if (self.connection != nil) {
+		[self.connection cancel];
+		self.connection = nil;
+	}
 }
 
 @end
 
 #pragma mark -
 
+@interface TwitterFakeServer ()
+
+@property (strong, nonatomic) NSTimer *timer;
+
+@end
+
 @implementation TwitterFakeServer
+
+#pragma mark Initializations
+
+- (instancetype)initWithTweet:(Tweet *)tweet andInterval:(NSTimeInterval)interval
+{
+	self = [super init];
+	if (self) {
+		_fakeTweet = tweet;
+		_timeInterval = interval;
+	}
+	return self;
+}
+
++ (instancetype)twitterFakeServerWithTweet:(Tweet *)tweet andInterval:(NSTimeInterval)interval
+{
+	return [[self alloc] initWithTweet:tweet andInterval:interval];
+}
+
+#pragma mark TwitterFakeServer
 
 - (void)sendStreamingRequestWithParameters:(NSDictionary *)requestParameters
 {
-#warning repeatedly send self.fakeTweet at timeInterval intervals
+	self.timer = [NSTimer scheduledTimerWithTimeInterval:self.timeInterval target:self selector:@selector(sendFakeTweet) userInfo:nil repeats:YES];
+}
+
+- (void)stopStreaming
+{
+	[self.timer invalidate];
+}
+
+- (void)sendFakeTweet
+{
+	if (self.delegate != nil) [self.delegate twitterServer:self didReceiveTweet:self.fakeTweet];
 }
 
 @end
