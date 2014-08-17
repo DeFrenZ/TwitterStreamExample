@@ -8,7 +8,7 @@
 
 @import UIKit;
 @import Accounts;
-@import Social;
+#import "TwitterServer.h"
 
-@interface MainViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, NSURLConnectionDataDelegate>
+@interface MainViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, TwitterServerDelegate>
 @end

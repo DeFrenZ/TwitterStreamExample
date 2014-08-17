@@ -23,8 +23,8 @@
 @interface MainViewController ()
 
 @property (strong, nonatomic) WebImageDownloader *profileImagesDownloader;
+@property (strong, nonatomic) TwitterServer *twitterServer;
 @property (strong, nonatomic) NSArray *twitterAccountsList;
-@property (strong, nonatomic) ACAccount *twitterAccount;
 @property (strong, nonatomic) NSMutableArray *tweetsArray;
 @property (strong, nonatomic) TweetCell *prototypeCell;
 
@@ -74,6 +74,7 @@ static NSString *cellID = @"Cell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+#warning could make the first cell appear as an UIActivityIndicatorView to let the user know it is doing something (waiting for tweets)
 	TweetCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
 	[self configureCell:cell forRowAtIndexPath:indexPath];
 	return cell;
@@ -81,7 +82,6 @@ static NSString *cellID = @"Cell";
 
 - (void)configureCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-#warning could make the first cell appear as an UIActivityIndicatorView to let the user know it is doing something (waiting for tweets)
 	if ([cell isKindOfClass:[TweetCell class]]) {
 		TweetCell *tweetCell = (TweetCell *)cell;
 		tweetCell.profileImageDownloader = self.profileImagesDownloader;
@@ -98,24 +98,20 @@ static NSString *cellID = @"Cell";
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+	ACAccount *selectedAccount;
 	if (buttonIndex == [actionSheet cancelButtonIndex]) {
-		self.twitterAccount = nil;
+		selectedAccount = nil;
 	} else {
-		ACAccount *selectedAccount = self.twitterAccountsList[buttonIndex];
-		self.twitterAccount = selectedAccount;
-		[self didSetTwitterAccount];
+		selectedAccount = self.twitterAccountsList[buttonIndex];
 	}
+	[self didSetTwitterAccount:selectedAccount];
 }
 
-#pragma mark NSURLConnectionDelegate
+#pragma mark TwitterServerDelegate
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+- (void)twitterServer:(TwitterServer *)server didReceiveTweet:(Tweet *)tweet
 {
-	Tweet *receivedTweet = [Tweet tweetWithJSONData:data];
-	if (receivedTweet != nil) {
-		NSLog(@"Received and correctly parsed %d bytes of data.", [data length]);
-		[self addTweet:receivedTweet];
-	}
+	[self addTweet:tweet];
 }
 
 #pragma mark UIButton
@@ -134,16 +130,14 @@ static NSString *cellID = @"Cell";
 	self.tweetsArray = [NSMutableArray arrayWithCapacity:NUMBER_OF_TWEETS_SHOWN];
 	self.profileImagesDownloader = [WebImageDownloader new];
 #warning Could use the popular SDWebImage library but wanted to do without using 3rd party libraries for now
+	self.twitterServer = [TwitterServer new];
+	[self.twitterServer setDelegate:self];
 	
 	[self.loadingView.layer setCornerRadius:LOADING_VIEW_CORNER_RADIUS];
 	[self.twitterTableView setContentInset:UIEdgeInsetsMake(STATUS_BAR_HEIGHT, self.twitterTableView.contentInset.left, self.twitterTableView.contentInset.bottom, self.twitterTableView.contentInset.right)];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+#warning Ignored didReceiveMemoryWarning as the maximum NSCache size is very small
 
 #pragma mark MainViewController
 
@@ -221,8 +215,7 @@ static NSString *cellID = @"Cell";
 	} else if (numberOfTwitterAccounts > 1) {
 		[self selectTwitterAccountFromArray:twitterAccounts];
 	} else {
-		self.twitterAccount = twitterAccounts[0];
-		[self didSetTwitterAccount];
+		[self didSetTwitterAccount:twitterAccounts[0]];
 	}
 }
 
@@ -245,22 +238,14 @@ static NSString *cellID = @"Cell";
 	}];
 }
 
-- (void)didSetTwitterAccount
+- (void)didSetTwitterAccount:(ACAccount *)account
 {
-	NSLog(@"Twitter account selected: %@", [self.twitterAccount username]);
-	[self showTableView:YES];
-	[self sendRequestWithTwitterAccount:self.twitterAccount];
-}
-
-- (void)sendRequestWithTwitterAccount:(ACAccount *)account
-{
-	NSURL *requestURL = [NSURL URLWithString:@"https://stream.twitter.com/1.1/statuses/filter.json"];
-	NSDictionary *requestParameters = @{@"track": @"banking"};
-	SLRequest *request = [SLRequest requestForServiceType:SLServiceTypeTwitter requestMethod:SLRequestMethodPOST URL:requestURL parameters:requestParameters];
-	request.account = account;
-	
-	NSURLConnection *connection = [NSURLConnection connectionWithRequest:[request preparedURLRequest] delegate:self];
-	[connection start];
+	NSLog(@"Twitter account selected: %@", [account username]);
+	[self.twitterServer setAccount:account];
+	if (account != nil) {
+		[self showTableView:YES];
+		[self.twitterServer sendStreamingRequestWithParameters:@{@"track": @"banking"}];
+	}
 }
 
 @end

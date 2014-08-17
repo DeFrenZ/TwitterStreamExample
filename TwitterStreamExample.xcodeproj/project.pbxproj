@@ -11,6 +11,7 @@
 		038E7D9019A0E510005C84D4 /* TweetTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 038E7D8F19A0E510005C84D4 /* TweetTest.m */; };
 		038E7D9619A103E1005C84D4 /* WebImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 038E7D9519A103E1005C84D4 /* WebImageDownloader.m */; };
 		038E7D9819A110FC005C84D4 /* WebImageDownloaderTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 038E7D9719A110FC005C84D4 /* WebImageDownloaderTest.m */; };
+		038E7D9B19A141AC005C84D4 /* TwitterServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 038E7D9A19A141AC005C84D4 /* TwitterServer.m */; };
 		03BBA3B0199A513100D0389E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BBA3AF199A513100D0389E /* Foundation.framework */; };
 		03BBA3B2199A513100D0389E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BBA3B1199A513100D0389E /* CoreGraphics.framework */; };
 		03BBA3B4199A513100D0389E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03BBA3B3199A513100D0389E /* UIKit.framework */; };
@@ -44,6 +45,8 @@
 		038E7D9419A103E1005C84D4 /* WebImageDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebImageDownloader.h; sourceTree = "<group>"; };
 		038E7D9519A103E1005C84D4 /* WebImageDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebImageDownloader.m; sourceTree = "<group>"; };
 		038E7D9719A110FC005C84D4 /* WebImageDownloaderTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WebImageDownloaderTest.m; path = TwitterStreamExampleTests/WebImageDownloaderTest.m; sourceTree = SOURCE_ROOT; };
+		038E7D9919A141AC005C84D4 /* TwitterServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TwitterServer.h; sourceTree = "<group>"; };
+		038E7D9A19A141AC005C84D4 /* TwitterServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TwitterServer.m; sourceTree = "<group>"; };
 		03BBA3AC199A513100D0389E /* TwitterStreamExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitterStreamExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		03BBA3AF199A513100D0389E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		03BBA3B1199A513100D0389E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -108,6 +111,8 @@
 				038E7D8D19A0C684005C84D4 /* Tweet.m */,
 				038E7D9419A103E1005C84D4 /* WebImageDownloader.h */,
 				038E7D9519A103E1005C84D4 /* WebImageDownloader.m */,
+				038E7D9919A141AC005C84D4 /* TwitterServer.h */,
+				038E7D9A19A141AC005C84D4 /* TwitterServer.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -295,6 +300,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				038E7D9B19A141AC005C84D4 /* TwitterServer.m in Sources */,
 				03BBA3C6199A513200D0389E /* MainViewController.m in Sources */,
 				038E7D9619A103E1005C84D4 /* WebImageDownloader.m in Sources */,
 				03BBA3C0199A513100D0389E /* AppDelegate.m in Sources */,

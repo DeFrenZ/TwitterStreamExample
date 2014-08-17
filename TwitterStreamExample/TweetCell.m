@@ -18,7 +18,9 @@
 		if (self.profileImageDownloader != nil) {
 #warning Could make a UIActivityIndicatorView appear while downloading the profile image
 			[self.profileImageDownloader downloadImageFromURL:self.profileImageURL completion:^(UIImage *downloadedImage) {
-				[self.profileImageView setImage:downloadedImage];
+				dispatch_async(dispatch_get_main_queue(), ^{
+					[self.profileImageView setImage:downloadedImage];
+				});
 			}];
 		} else {
 			NSLog(@"Trying to retrieve the profile image without having a downloader set.");
