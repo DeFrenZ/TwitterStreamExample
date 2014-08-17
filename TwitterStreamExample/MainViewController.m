@@ -8,6 +8,7 @@
 
 #import "MainViewController.h"
 #import "TweetCell.h"
+#import "Tweet.h"
 
 #define ALPHA_TRANSPARENT 0.0
 #define ALPHA_OPAQUE 1.0
@@ -82,12 +83,12 @@ static NSString *cellID = @"Cell";
 	if ([cell isKindOfClass:[TweetCell class]]) {
 		TweetCell *tweetCell = (TweetCell *)cell;
 		tweetCell.profileImageCache = self.profileImagesCache;
-		NSDictionary *cellData = self.tweetsArray[[indexPath row]];
+		Tweet *cellData = self.tweetsArray[[indexPath row]];
 		
-		[tweetCell setAndLoadProfileImageFromURL:[NSURL URLWithString:cellData[@"user"][@"profile_image_url"]]];
-		[tweetCell.usernameLabel setText:cellData[@"user"][@"name"]];
-		[tweetCell.screenNameLabel setText:[NSString stringWithFormat:@"@%@", cellData[@"user"][@"screen_name"]]];
-		[tweetCell.tweetTextLabel setText:cellData[@"text"]];
+		[tweetCell setAndLoadProfileImageFromURL:cellData.user.profileImageURL];
+		[tweetCell.usernameLabel setText:cellData.user.name];
+		[tweetCell.screenNameLabel setText:[NSString stringWithFormat:@"@%@", cellData.user.screenName]];
+		[tweetCell.tweetTextLabel setText:cellData.text];
 	}
 }
 
@@ -108,13 +109,10 @@ static NSString *cellID = @"Cell";
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-	NSError *JSONError;
-	NSDictionary *dataDictionary = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&JSONError];
-	if (dataDictionary == nil) {
-		NSLog(@"JSON Error: %@. Data is %d bytes.", [JSONError localizedDescription], [data length]);
-	} else {
+	Tweet *receivedTweet = [Tweet tweetWithJSONData:data];
+	if (receivedTweet != nil) {
 		NSLog(@"Received and correctly parsed %d bytes of data.", [data length]);
-		[self addTweet:dataDictionary];
+		[self addTweet:receivedTweet];
 	}
 }
 
@@ -159,9 +157,9 @@ static NSString *cellID = @"Cell";
 	}];
 }
 
-- (void)addTweet:(NSDictionary *)tweetDictionary
+- (void)addTweet:(Tweet *)tweet
 {
-	[self.tweetsArray insertObject:tweetDictionary atIndex:0];
+	[self.tweetsArray insertObject:tweet atIndex:0];
 	
 	[self.twitterTableView beginUpdates]; {
 		if ([self.tweetsArray count] > NUMBER_OF_TWEETS_SHOWN) {
